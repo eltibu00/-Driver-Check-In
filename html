@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <title>Driver Check-In Form - NJ3</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 5px;
+        }
+
+        .header p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .form-section {
+            padding: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+            font-size: 14px;
+        }
+
+        input[type="text"],
+        input[type="time"],
+        input[type="date"],
+        select {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+            -webkit-appearance: none;
+            appearance: none;
+        }
+        
+        /* Prevent zoom on iOS when focusing inputs */
+        @media screen and (max-width: 768px) {
+            input[type="text"],
+            input[type="time"],
+            input[type="date"],
+            select {
+                font-size: 16px;
+            }
+        }
+
+        input[type="text"]:focus,
+        input[type="time"]:focus,
+        input[type="date"]:focus,
+        select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .required {
+            color: #e74c3c;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 30px;
+        }
+
+        button {
+            flex: 1;
+            padding: 15px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .submit-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .clear-btn {
+            background: #f0f0f0;
+            color: #333;
+        }
+
+        .clear-btn:hover {
+            background: #e0e0e0;
+        }
+
+        .success-message {
+            display: none;
+            background: #2ecc71;
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .error-message {
+            display: none;
+            background: #e74c3c;
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .current-time {
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 5px;
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .photo-section {
+            text-align: center;
+        }
+
+        .photo-btn {
+            width: 100%;
+            padding: 15px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-bottom: 15px;
+        }
+
+        .photo-btn:hover {
+            background: #2980b9;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(52, 152, 219, 0.3);
+        }
+
+        .photo-preview {
+            margin-top: 10px;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .photo-preview img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            border: 2px solid #e0e0e0;
+        }
+
+        .photo-preview.has-photo {
+            position: relative;
+        }
+
+        .remove-photo {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #e74c3c;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            cursor: pointer;
+            font-size: 18px;
+            line-height: 1;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+        }
+
+        /* Mobile optimizations */
+        @media (max-width: 768px) {
+            body {
+                padding: 0;
+            }
+            
+            .container {
+                margin: 0;
+                border-radius: 0;
+                min-height: 100vh;
+            }
+            
+            .header {
+                padding: 20px;
+            }
+            
+            .header h1 {
+                font-size: 24px;
+            }
+            
+            .form-section {
+                padding: 20px;
+            }
+            
+            .form-group {
+                margin-bottom: 25px;
+            }
+            
+            label {
+                font-size: 15px;
+                margin-bottom: 10px;
+            }
+            
+            input[type="text"],
+            input[type="time"],
+            input[type="date"],
+            select {
+                padding: 16px;
+                font-size: 16px;
+            }
+            
+            button {
+                padding: 18px;
+                font-size: 17px;
+            }
+            
+            .photo-btn {
+                padding: 20px;
+                font-size: 18px;
+            }
+            
+            .current-time {
+                font-size: 13px;
+                padding: 12px;
+            }
+        }
+        
+        /* Extra small devices */
+        @media (max-width: 480px) {
+            .header h1 {
+                font-size: 22px;
+            }
+            
+            .button-group {
+                flex-direction: column;
+            }
+            
+            button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🚛 Driver Check-In</h1>
+            <p>NJ3 Warehouse Operations</p>
+        </div>
+
+        <div class="form-section">
+            <div class="current-time" id="currentTime"></div>
+            
+            <div class="success-message" id="successMessage">
+                ✓ Driver information submitted successfully!
+            </div>
+            
+            <div class="error-message" id="errorMessage">
+                ✗ Please fill in all required fields
+            </div>
+
+            <form id="driverForm">
+                <div class="form-group">
+                    <label for="date">Date <span class="required">*</span></label>
+                    <input type="date" id="date" name="date" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="checkInTime">Check-In Time <span class="required">*</span></label>
+                    <input type="time" id="checkInTime" name="checkInTime" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="driverName">Driver Name <span class="required">*</span></label>
+                    <input type="text" id="driverName" name="driverName" placeholder="Enter driver's name" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="carrierName">Carrier/Company <span class="required">*</span></label>
+                    <input type="text" id="carrierName" name="carrierName" placeholder="Enter carrier name" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="trailerNumber">Trailer Number</label>
+                    <input type="text" id="trailerNumber" name="trailerNumber" placeholder="Enter trailer number">
+                </div>
+
+                <div class="form-group">
+                    <label for="dockDoor">Dock Door <span class="required">*</span></label>
+                    <select id="dockDoor" name="dockDoor" required>
+                        <option value="">Select Dock Door</option>
+                        <option value="Door 11">Door 11</option>
+                        <option value="Door 12">Door 12</option>
+                        <option value="Door 13">Door 13</option>
+                        <option value="Door 14">Door 14</option>
+                        <option value="Door 15">Door 15</option>
+                        <option value="Door 16">Door 16</option>
+                        <option value="Door 17">Door 17</option>
+                        <option value="Door 18">Door 18</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="purpose">Purpose <span class="required">*</span></label>
+                    <select id="purpose" name="purpose" required>
+                        <option value="">Select Purpose</option>
+                        <option value="Pickup">Pickup</option>
+                        <option value="Delivery">Delivery</option>
+                        <option value="Both">Both (Pickup & Delivery)</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="poReference">PO / Reference Number <span class="required">*</span></label>
+                    <input type="text" id="poReference" name="poReference" placeholder="Enter PO or reference number" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="photo">Photo <span class="required">*</span></label>
+                    <div class="photo-section">
+                        <input type="file" id="photoInput" accept="image/*" capture="environment" style="display: none;">
+                        <button type="button" class="photo-btn" onclick="document.getElementById('photoInput').click()">
+                            📷 Take Photo
+                        </button>
+                        <div id="photoPreview" class="photo-preview"></div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="notes">Notes</label>
+                    <input type="text" id="notes" name="notes" placeholder="Any additional notes">
+                </div>
+
+                <div class="button-group">
+                    <button type="button" class="clear-btn" onclick="clearForm()">Clear</button>
+                    <button type="submit" class="submit-btn">Submit Check-In</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        let photoData = null;
+
+        // REPLACE WITH YOUR GOOGLE APPS SCRIPT WEB APP URL
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyu5Ai41d5NOyQO6cERmY-V08Z3uJD7RxLloJ2oGzJNEErWzCTi405yTsW7L7rEUOdw/exec';
+
+        // Update current time display
+        function updateTime() {
+            const now = new Date();
+            const timeString = now.toLocaleString('en-US', {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+            document.getElementById('currentTime').textContent = timeString;
+        }
+
+        // Set default date and time
+        function setDefaults() {
+            const now = new Date();
+            
+            // Set date to today
+            const dateInput = document.getElementById('date');
+            dateInput.valueAsDate = now;
+            
+            // Set time to current time
+            const timeInput = document.getElementById('checkInTime');
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            timeInput.value = `${hours}:${minutes}`;
+        }
+
+        // Handle photo input
+        document.getElementById('photoInput').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    photoData = event.target.result;
+                    displayPhoto(photoData);
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        function displayPhoto(dataUrl) {
+            const preview = document.getElementById('photoPreview');
+            preview.innerHTML = `
+                <div style="position: relative; display: inline-block;">
+                    <img src="${dataUrl}" alt="Driver Photo">
+                    <button type="button" class="remove-photo" onclick="removePhoto()">×</button>
+                </div>
+            `;
+            preview.classList.add('has-photo');
+        }
+
+        function removePhoto() {
+            photoData = null;
+            document.getElementById('photoPreview').innerHTML = '';
+            document.getElementById('photoPreview').classList.remove('has-photo');
+            document.getElementById('photoInput').value = '';
+        }
+
+        // Initialize on page load
+        updateTime();
+        setInterval(updateTime, 1000);
+        setDefaults();
+
+        // Form submission
+        document.getElementById('driverForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            const data = Object.fromEntries(formData);
+            
+            // Hide any previous messages
+            document.getElementById('successMessage').style.display = 'none';
+            document.getElementById('errorMessage').style.display = 'none';
+            
+            // Validate required fields
+            if (!data.date || !data.checkInTime || !data.driverName || !data.carrierName || 
+                !data.dockDoor || !data.purpose || !data.poReference || !photoData) {
+                document.getElementById('errorMessage').textContent = '✗ Please fill in all required fields and take a photo';
+                document.getElementById('errorMessage').style.display = 'block';
+                setTimeout(() => {
+                    document.getElementById('errorMessage').style.display = 'none';
+                }, 3000);
+                return;
+            }
+            
+            // Add photo data to submission
+            data.photo = photoData;
+            
+            // Disable submit button during submission
+            const submitBtn = document.querySelector('.submit-btn');
+            const originalText = submitBtn.textContent;
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Submitting...';
+            
+            try {
+                // Send to Google Apps Script
+                const response = await fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data)
+                });
+                
+                // Show success message
+                document.getElementById('successMessage').style.display = 'block';
+                
+                // Clear form after 2 seconds
+                setTimeout(() => {
+                    clearForm();
+                    document.getElementById('successMessage').style.display = 'none';
+                }, 2000);
+                
+            } catch (error) {
+                console.error('Error:', error);
+                document.getElementById('errorMessage').textContent = '✗ Error submitting form. Please try again.';
+                document.getElementById('errorMessage').style.display = 'block';
+                setTimeout(() => {
+                    document.getElementById('errorMessage').style.display = 'none';
+                }, 3000);
+            } finally {
+                // Re-enable submit button
+                submitBtn.disabled = false;
+                submitBtn.textContent = originalText;
+            }
+        });
+
+        function clearForm() {
+            document.getElementById('driverForm').reset();
+            removePhoto();
+            setDefaults();
+            document.getElementById('successMessage').style.display = 'none';
+            document.getElementById('errorMessage').style.display = 'none';
+        }
+    </script>
+</body>
+</html>
